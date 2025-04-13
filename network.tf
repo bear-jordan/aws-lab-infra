@@ -4,26 +4,46 @@ resource "aws_vpc" "aws_lab_vpc" {
   instance_tenancy     = "default"
   enable_dns_support   = "true"
   enable_dns_hostnames = "true"
-  tags                 = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "aws_lab_vpc"
+    }
+  )
 }
 
 ## Gateway
 resource "aws_internet_gateway" "public_gateway" {
   vpc_id = aws_vpc.aws_lab_vpc.id
 
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "public_gateway"
+    }
+  )
 }
 
 resource "aws_eip" "aws_lab_nat" {
   domain = "vpc"
-  tags   = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "aws_lab_nat"
+    }
+  )
 }
 
 resource "aws_nat_gateway" "aws_lab_nat_gateway" {
   allocation_id = aws_eip.aws_lab_nat.id
   subnet_id     = aws_subnet.public_subnet_0.id
   depends_on    = [aws_internet_gateway.public_gateway]
-  tags          = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "aws_lab_nat_gateway"
+    }
+  )
 }
 
 ## Subnets
@@ -32,8 +52,12 @@ resource "aws_subnet" "public_subnet_0" {
   cidr_block              = var.public_subnets[0]
   availability_zone       = var.availability_zones[0]
   map_public_ip_on_launch = "true"
-
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "public_subnet_0"
+    }
+  )
 }
 
 resource "aws_subnet" "public_subnet_1" {
@@ -41,24 +65,36 @@ resource "aws_subnet" "public_subnet_1" {
   cidr_block              = var.public_subnets[1]
   availability_zone       = var.availability_zones[1]
   map_public_ip_on_launch = "true"
-
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "public_subnet_1"
+    }
+  )
 }
 
 resource "aws_subnet" "private_subnet_0" {
   vpc_id            = aws_vpc.aws_lab_vpc.id
   cidr_block        = var.private_subnets[0]
   availability_zone = var.availability_zones[0]
-
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "private_subnet_0"
+    }
+  )
 }
 
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.aws_lab_vpc.id
   cidr_block        = var.private_subnets[1]
   availability_zone = var.availability_zones[1]
-
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "private_subnet_1"
+    }
+  )
 }
 
 ## Route Tables
@@ -70,7 +106,12 @@ resource "aws_route_table" "public_route_table" {
     gateway_id = aws_internet_gateway.public_gateway.id
   }
 
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "public_route_table"
+    }
+  )
 }
 
 resource "aws_route_table" "private_route_table" {
@@ -81,7 +122,12 @@ resource "aws_route_table" "private_route_table" {
     nat_gateway_id = aws_nat_gateway.aws_lab_nat_gateway.id
   }
 
-  tags = var.default_tags
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "private_route_table"
+    }
+  )
 }
 
 resource "aws_route_table_association" "public_route_0" {

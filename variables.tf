@@ -3,7 +3,7 @@ variable "default_tags" {
   default = {
     Terraform   = "true"
     Environment = "dev"
-    Project     = "aws-lab"
+    Project     = "aws_lab"
   }
 }
 
