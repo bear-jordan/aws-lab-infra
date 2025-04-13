@@ -107,3 +107,31 @@ resource "aws_redshiftserverless_workgroup" "aws_lab_redshift_wg" {
     }
   )
 }
+
+# EC2 (k8s)
+resource "aws_security_group" "aws_lab_k8s_sg" {
+  name        = "aws_lab_k8s_sg"
+  description = "Kubernetes security group"
+  vpc_id      = aws_vpc.aws_lab_vpc.id
+
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    self      = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "aws_lab_k8s_sg"
+    }
+  )
+}
