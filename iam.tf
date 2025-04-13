@@ -3,23 +3,25 @@ resource "aws_iam_user_policy_attachment" "query_editor_access" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonRedshiftQueryEditorV2FullAccess"
 }
 
-resource "aws_iam_role" "vmimport" {
-  name = "vmimport"
+resource "aws_kms_key" "vmimport_key" {
+  description             = "KMS key for vmimport"
+  deletion_window_in_days = 7
 
-  assume_role_policy = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
+        Sid    = "Allow vmimport to decrypt SSE-KMS key",
         Effect = "Allow",
         Principal = {
-          Service = "vmie.amazonaws.com"
+          AWS = [
+            "arn:aws:iam::216363851037:role/vmimport"
+          ]
         },
-        Action = "sts:AssumeRole",
-        Condition = {
-          StringEquals = {
-            "sts:ExternalId" : "vmimport"
-          }
-        }
+        Action = [
+          "kms:Decrypt"
+        ],
+        Resource = "*"
       }
     ]
   })
