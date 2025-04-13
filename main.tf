@@ -88,7 +88,7 @@ resource "aws_redshiftserverless_namespace" "aws_lab_redshift_db" {
 
 
 resource "aws_redshiftserverless_workgroup" "aws_lab_redshift_wg" {
-  workgroup_name       = "aws_lab_redshift_wg"
+  workgroup_name       = "aws-lab-redshift-wg"
   namespace_name       = aws_redshiftserverless_namespace.aws_lab_redshift_db.namespace_name
   base_capacity        = 8
   enhanced_vpc_routing = true
