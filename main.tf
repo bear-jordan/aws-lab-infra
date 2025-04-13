@@ -23,11 +23,6 @@ resource "aws_s3_bucket" "aws_lab_bucket" {
   )
 }
 
-resource "aws_s3_bucket_acl" "aws_lab_bucket_acl" {
-  bucket = aws_s3_bucket.aws_lab_bucket.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_versioning" "aws_lab_bucket_versioning" {
   bucket = aws_s3_bucket.aws_lab_bucket.id
   versioning_configuration {
@@ -80,7 +75,7 @@ resource "aws_security_group" "aws_lab_redshift_sg" {
 }
 
 resource "aws_redshiftserverless_namespace" "aws_lab_redshift_db" {
-  namespace_name = "aws_lab"
+  namespace_name = "aws-lab"
   db_name        = "aws_lab"
 
   tags = merge(
