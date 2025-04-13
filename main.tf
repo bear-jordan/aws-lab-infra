@@ -96,7 +96,8 @@ resource "aws_redshiftserverless_workgroup" "aws_lab_redshift_wg" {
   security_group_ids = [aws_security_group.aws_lab_redshift_sg.id]
   subnet_ids = [
     aws_subnet.private_subnet_0.id,
-    aws_subnet.private_subnet_1.id
+    aws_subnet.private_subnet_1.id,
+    aws_subnet.private_subnet_2.id
   ]
 
   tags = merge(

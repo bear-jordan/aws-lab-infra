@@ -73,6 +73,19 @@ resource "aws_subnet" "public_subnet_1" {
   )
 }
 
+resource "aws_subnet" "public_subnet_2" {
+  vpc_id                  = aws_vpc.aws_lab_vpc.id
+  cidr_block              = var.public_subnets[2]
+  availability_zone       = var.availability_zones[2]
+  map_public_ip_on_launch = "true"
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "public_subnet_2"
+    }
+  )
+}
+
 resource "aws_subnet" "private_subnet_0" {
   vpc_id            = aws_vpc.aws_lab_vpc.id
   cidr_block        = var.private_subnets[0]
@@ -93,6 +106,18 @@ resource "aws_subnet" "private_subnet_1" {
     var.default_tags,
     {
       Name = "private_subnet_1"
+    }
+  )
+}
+
+resource "aws_subnet" "private_subnet_2" {
+  vpc_id            = aws_vpc.aws_lab_vpc.id
+  cidr_block        = var.private_subnets[2]
+  availability_zone = var.availability_zones[2]
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "private_subnet_2"
     }
   )
 }
@@ -140,6 +165,11 @@ resource "aws_route_table_association" "public_route_1" {
   route_table_id = aws_route_table.public_route_table.id
 }
 
+resource "aws_route_table_association" "public_route_2" {
+  subnet_id      = aws_subnet.public_subnet_2.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
 resource "aws_route_table_association" "private_route_0" {
   subnet_id      = aws_subnet.private_subnet_0.id
   route_table_id = aws_route_table.private_route_table.id
@@ -147,6 +177,11 @@ resource "aws_route_table_association" "private_route_0" {
 
 resource "aws_route_table_association" "private_route_1" {
   subnet_id      = aws_subnet.private_subnet_1.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
+resource "aws_route_table_association" "private_route_2" {
+  subnet_id      = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.private_route_table.id
 }
 
