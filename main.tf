@@ -139,7 +139,7 @@ resource "aws_security_group" "aws_lab_k8s_sg" {
 resource "aws_instance" "aws_lab_talos_controller" {
   count                  = var.controller_count
   ami                    = "ami-0c332b60cc8a1d564"
-  instance_type          = "t2.micro"
+  instance_type          = "t2.small"
   subnet_id              = aws_subnet.public_subnet_0.id
   vpc_security_group_ids = [aws_security_group.aws_lab_k8s_sg.id]
 
