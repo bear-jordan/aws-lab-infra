@@ -68,10 +68,20 @@ resource "aws_iam_role_policy" "vmimport_policy" {
 resource "aws_kms_key" "vmimport_key" {
   description             = "KMS key for imported snapshots"
   deletion_window_in_days = 7
+  enable_key_rotation     = true
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
+      {
+        Sid    = "Enable root user permissions",
+        Effect = "Allow",
+        Principal = {
+          AWS = "arn:aws:iam::216363851037:root"
+        },
+        Action   = "kms:*",
+        Resource = "*"
+      },
       {
         Sid    = "Allow vmimport to decrypt snapshots",
         Effect = "Allow",
@@ -85,4 +95,6 @@ resource "aws_kms_key" "vmimport_key" {
       }
     ]
   })
+
+  tags = var.default_tags
 }
