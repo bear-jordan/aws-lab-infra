@@ -22,3 +22,13 @@ variable "availability_zones" {
   type    = list(string)
   default = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
+
+# ECS (k8s)
+variable "controller_count" {
+  default = 1
+}
+
+variable "worker_count" {
+  default = 1
+}
+
