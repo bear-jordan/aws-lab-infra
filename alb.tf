@@ -5,6 +5,14 @@ resource "aws_lb" "aws_lab_alb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.aws_lab_nginx_sg.id]
   subnets            = [aws_subnet.public_subnet_0.id, aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+
+
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "aws_lab_alb"
+    }
+  )
 }
 
 # Listener
@@ -22,7 +30,7 @@ resource "aws_lb_listener" "my_alb_listener" {
 # WAF Association
 resource "aws_wafv2_web_acl_association" "waf-alb" {
   resource_arn = aws_lb.aws_lab_alb.arn
-  web_acl_arn  = aws_wafv2_web_acl.my_waf.arn
+  web_acl_arn  = aws_wafv2_web_acl.aws_lab_waf.arn
 }
 
 # Target Group

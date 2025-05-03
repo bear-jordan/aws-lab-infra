@@ -1,4 +1,4 @@
-resource "aws_wafv2_web_acl" "my_waf" {
+resource "aws_wafv2_web_acl" "aws_lab_waf" {
   name  = "my-waf-acl"
   scope = "REGIONAL"
 
@@ -11,4 +11,11 @@ resource "aws_wafv2_web_acl" "my_waf" {
     metric_name                = "my-waf-metric"
     sampled_requests_enabled   = false
   }
+
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "aws_lab_waf"
+    }
+  )
 }
