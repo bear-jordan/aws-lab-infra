@@ -33,8 +33,9 @@ resource "aws_security_group" "aws_lab_nginx_sg" {
 }
 
 resource "aws_instance" "hello_world_0" {
-  ami           = "ami-0b0ea68c435eb488d"
-  instance_type = "t2.micro"
+  ami                    = "ami-0b0ea68c435eb488d"
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.aws_lab_nginx_sg.id]
 
   subnet_id = aws_subnet.public_subnet_0.id
 
