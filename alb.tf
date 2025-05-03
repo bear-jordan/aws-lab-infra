@@ -3,7 +3,7 @@ resource "aws_lb" "my_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.aws_lab_nginx_sg.id]
-  subnets            = var.public_subnets
+  subnets            = [aws_subnet.public_subnet_0.id, aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
 }
 
 resource "aws_lb_listener" "my_alb_listener" {
