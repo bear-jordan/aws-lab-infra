@@ -1,4 +1,4 @@
-resource "aws_lb" "my_alb" {
+resource "aws_lb" "aws_lab_alb" {
   name               = "my-alb"
   internal           = false
   load_balancer_type = "application"
@@ -7,22 +7,22 @@ resource "aws_lb" "my_alb" {
 }
 
 resource "aws_lb_listener" "my_alb_listener" {
-  load_balancer_arn = aws_lb.my_alb.arn
+  load_balancer_arn = aws_lb.aws_lab_alb.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.my_tg_a.arn
+    target_group_arn = aws_lb_target_group.nginx.arn
   }
 }
 
 resource "aws_wafv2_web_acl_association" "waf-alb" {
-  resource_arn = aws_lb.my_alb.arn
+  resource_arn = aws_lb.aws_lab_alb.arn
   web_acl_arn  = aws_wafv2_web_acl.my_waf.arn
 }
 
-resource "aws_lb_target_group" "my_tg_a" {
+resource "aws_lb_target_group" "nginx" {
   name     = "target-group-a"
   port     = 80
   protocol = "HTTP"
@@ -40,7 +40,7 @@ resource "aws_lb_target_group" "my_tg_a" {
 }
 
 resource "aws_lb_target_group_attachment" "tg_attachment_a" {
-  target_group_arn = aws_lb_target_group.my_tg_a.arn
+  target_group_arn = aws_lb_target_group.nginx.arn
   target_id        = aws_instance.hello_world_0.id
   port             = 80
 }
