@@ -58,6 +58,7 @@ resource "aws_redshiftserverless_workgroup" "aws_lab_redshift_wg" {
   namespace_name       = aws_redshiftserverless_namespace.aws_lab_redshift_db.namespace_name
   base_capacity        = 8
   enhanced_vpc_routing = true
+  publicly_accessible  = true
 
   security_group_ids = [aws_security_group.aws_lab_redshift_sg.id]
   subnet_ids = [
