@@ -47,6 +47,7 @@ resource "aws_instance" "aws_lab_talos_worker" {
   instance_type          = "t3.medium"
   subnet_id              = aws_subnet.public_subnet_0.id
   vpc_security_group_ids = [aws_security_group.aws_lab_k8s_sg.id]
+  iam_instance_profile   = aws_iam_instance_profile.grafana_profile.name
 
   tags = merge(
     var.default_tags,
