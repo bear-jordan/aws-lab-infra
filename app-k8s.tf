@@ -56,6 +56,7 @@ resource "aws_instance" "aws_lab_talos_worker" {
   )
 }
 
+# ALB
 resource "aws_lb_target_group" "nginx_ingress_tg" {
   name        = "nginx-ingress-tg"
   port        = 30080
@@ -86,5 +87,15 @@ resource "aws_lb_target_group_attachment" "nginx_ingress_nodes" {
   target_group_arn = aws_lb_target_group.nginx_ingress_tg.arn
   target_id        = aws_instance.aws_lab_talos_worker[count.index].private_ip
   port             = 30080
+}
+
+resource "aws_security_group_rule" "allow_alb_to_nodeport" {
+  type                     = "ingress"
+  from_port                = 30080
+  to_port                  = 30080
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.aws_lab_k8s_sg.id
+  source_security_group_id = aws_security_group.aws_lab_alb_sg.id
+  description              = "Allow ALB to reach NodePort 30080"
 }
 
