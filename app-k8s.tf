@@ -56,4 +56,35 @@ resource "aws_instance" "aws_lab_talos_worker" {
   )
 }
 
+resource "aws_lb_target_group" "nginx_ingress_tg" {
+  name        = "nginx-ingress-tg"
+  port        = 30080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.aws_lab_vpc.id
+
+  health_check {
+    path                = "/"
+    port                = "30080"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+  }
+
+  tags = merge(
+    var.default_tags,
+    {
+      Name = "nginx_ingress_tg"
+    }
+  )
+}
+
+resource "aws_lb_target_group_attachment" "nginx_ingress_nodes" {
+  count            = var.worker_count
+  target_group_arn = aws_lb_target_group.nginx_ingress_tg.arn
+  target_id        = aws_instance.aws_lab_talos_worker[count.index].private_ip
+  port             = 30080
+}
 
