@@ -66,7 +66,7 @@ resource "aws_lb_target_group" "nginx_ingress_tg" {
   vpc_id      = aws_vpc.aws_lab_vpc.id
 
   health_check {
-    path                = "/healthz"
+    path                = "/"
     port                = "30080"
     protocol            = "HTTP"
     matcher             = "200"
